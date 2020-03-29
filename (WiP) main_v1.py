@@ -6,10 +6,8 @@
 ##* Upper Band = 20-day SMA + (20-day standard deviation of price x 2) 
 ##* Lower Band = 20-day SMA - (20-day standard deviation of price x 2)
 import pandas as pd
-import requests
 import creds
-import time
-import finta as finta
+import finta as ta
 import oandapyV20
 import oandapyV20.endpoints.accounts as accounts
 import oandapyV20.endpoints.instruments as instruments
@@ -35,16 +33,38 @@ params = {
 }
 eurusd = instruments.InstrumentsCandles(instrument="EUR_USD", params = params)
 eurusd_candles = client.request(eurusd)
-#print(eurusd_candles)
 
 
-## Puts all candle close values into a list 
+## Puts all candle values into lists
 close_values = []
-num = 0
-candle_data = eurusd_candles['candles']
-for i in candle_data:    
+candle_data_close = eurusd_candles['candles']
+for i in candle_data_close:    
     close_price = i['mid']['c']
     close_values.append(close_price)
+##
+open_values = []
+candle_data_open = eurusd_candles['candles']
+for i in candle_data_open:
+    open_price = i['mid']['o']
+    open_values.append(open_price)
+##
+high_values = []
+candle_data_high = eurusd_candles['candles']
+for i in candle_data_high:
+    high_price = i['mid']['h']
+    high_values.append(high_price)
+## 
+low_values = []
+candle_data_low = eurusd_candles['candles']
+for i in candle_data_low:
+    low_price = i['mid']['l']
+    low_values.append(low_price)
+
+
+## Makes pandas dataframe , imports ohlc from last 300 candles
+# Zip the 4 lists to create a list of tuples
+zippedList = list(zip(open_values, high_values, low_values, close_values))
+df = pd.DataFrame(zippedList, columns = ['open' , 'high', 'low', 'close'])
 
 
 ## Determines trend 
