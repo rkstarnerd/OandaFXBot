@@ -7,7 +7,8 @@
 ##* Lower Band = 20-day SMA - (20-day standard deviation of price x 2)
 import pandas as pd
 import creds
-import finta as ta
+from finta import TA
+
 import oandapyV20
 import oandapyV20.endpoints.accounts as accounts
 import oandapyV20.endpoints.instruments as instruments
@@ -28,7 +29,7 @@ max_open_trades = 5
 
 ## Gets candlestick data for the tickers specified for the timeframe specified 
 params = {
-    'count': 300,
+    'count': 200,
     'granularity': 'M5'
 }
 eurusd = instruments.InstrumentsCandles(instrument="EUR_USD", params = params)
@@ -73,7 +74,7 @@ downtrend = None
 trend = None
 
 start_price = close_values[0]
-end_price = close_values[299]
+end_price = close_values[199]
 
 if start_price < end_price:
     uptrend = True
@@ -87,6 +88,8 @@ elif downtrend == True:
     uptrend = False
     trend = 'down'
 
+
+
 ###
 
 #If trend = up insert buy only code
@@ -95,8 +98,6 @@ elif downtrend == True:
 ###
 
 
-## Creates SMA, Bollinger band, and %b indicators
-
-
-
-
+## %B Indicator
+print(df)
+bb = TA.PERCENT_B(df)
