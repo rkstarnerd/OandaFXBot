@@ -34,4 +34,6 @@ usdjpy_last10 = usdjpy.tail(10)
 ## Concatenates dataframes into 1 for better horizontal reading
 horizontal_stack = pd.concat([eurusd_last10, usdcad_last10, gbpusd_last10, audusd_last10, eurgbp_last10, usdjpy_last10], axis = 1)
 
-print(horizontal_stack)
+while True:
+    print(horizontal_stack)
+    time.sleep(60)
