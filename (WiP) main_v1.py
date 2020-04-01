@@ -1,10 +1,12 @@
 import pandas as pd
 import numpy as np
 import creds
+import time
 from finta import TA
 import oandapyV20
 import oandapyV20.endpoints.accounts as accounts
 import oandapyV20.endpoints.instruments as instruments
+import tweepy as tweepy
 
 #Initializing credientials to the account
 client = oandapyV20.API(access_token=creds.APIKEY)
@@ -22,8 +24,8 @@ max_open_trades = 5
 
 ## Gets candlestick data for the tickers specified for the timeframe specified 
 params = {
-    'count': 200,
-    'granularity': 'M30'
+    'count': 100,
+    'granularity': 'H1'
 }
 eurusd = instruments.InstrumentsCandles(instrument="EUR_USD", params = params)
 eurusd_candles = client.request(eurusd)
@@ -86,20 +88,29 @@ trade_signal = []
 for i in bb:
     
     if i == 0:
-        trade_signal.append('N'),
+        trade_signal.append('_'),
     elif i > 1:
         trade_signal.append('Sell'),
     elif i < 0:
         trade_signal.append('Buy'),
     elif i <= 1 and i >= 0:
-        trade_signal.append('N')
-print(len(bb))
-print(len(trade_signal))
+        trade_signal.append('_')
 
 action = pd.DataFrame(trade_signal)
 df['Trade'] = action
 
 
+## This code formats the pandas db for viewer ease of use
 pd.set_option('display.width', None)
-pd.set_option('display.max_rows', None)
-print(df)
+pd.set_option('display.max_rows', 10)
+
+
+## This code makes connection to twitter and tweets buy/sell signals
+auth = tweepy.OAuthHandler(creds.consumer_key, creds.consumer_secret)
+auth.set_access_token(creds.access_token, creds.access_token_secret)
+api = tweepy.API(auth)
+
+
+while True:
+    print(df[['Time', 'Trade']])
+    time.sleep(60)
