@@ -8,3 +8,7 @@ typically these indicate good historical entries.
 
 
 I wrote this bot to reduce screen time spent watching for entries
+
+timezone is UTC in tradingview, 
+
+refreshes once every minute, index #99 is always most current 15m candle
