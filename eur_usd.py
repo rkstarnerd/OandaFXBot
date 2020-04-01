@@ -7,6 +7,7 @@ import oandapyV20
 import oandapyV20.endpoints.accounts as accounts
 import oandapyV20.endpoints.instruments as instruments
 import tweepy as tweepy
+import usd_cad
 
 
 def trade_eurusd():
@@ -80,7 +81,7 @@ def trade_eurusd():
 
     ## Adds time to df, formats all the extra zeros in the time data
     df['Time'] = candle_times
-    df['Time'] = df['Time'].map(lambda x: str(x)[:-11])
+    df['EUR/USD'] = df['Time'].map(lambda x: str(x)[:-11])
 
 
     ## Replaces NaN values with 0.0 so index length is the same for trade_signal, and bb columns
@@ -113,7 +114,14 @@ def trade_eurusd():
     #auth.set_access_token(creds.access_token, creds.access_token_secret)
     #api = tweepy.API(auth)
 
+   
+    ## Adds blank columns to seperate the trade pairs visually
+    df['----------'] = ""
 
-    while True:
-        print(df[['Time', 'Trade']])
-        time.sleep(60)
+    ## Merges all other dataframes into df
+    
+    
+    ## Prints dataframe for viewer to interpret
+    print(df[['EUR/USD', 'Trade', '----------']])
+
+
